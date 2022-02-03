@@ -100,6 +100,8 @@ class Scanner {
     public TokenInfo getNextToken() {
         StringBuffer buffer;
         boolean moreWhiteSpace = true;
+
+        // Clarify this from the book
         while (moreWhiteSpace) {
             while (isWhitespace(ch)) {
                 nextCh();
@@ -107,12 +109,13 @@ class Scanner {
             if (ch == '/') {
                 nextCh();
                 if (ch == '/') {
+                    // If this enters then it is a comment
                     // CharReader maps all new lines to '\n'
                     while (ch != '\n' && ch != EOFCH) {
                         nextCh();
                     }
                 } else {
-                    reportScannerError("Operator / is not supported in j--.");
+                    return new TokenInfo (DIV, line);
                 }
             } else {
                 moreWhiteSpace = false;
@@ -158,6 +161,9 @@ class Scanner {
         case '*':
             nextCh();
             return new TokenInfo(STAR, line);
+        case '%':
+            nextCh();
+            return new TokenInfo(REM, line);
         case '+':
             nextCh();
             if (ch == '=') {
